@@ -52,18 +52,16 @@ void oxoy()
   OX=analogRead(A0);
   OY=analogRead(A1);
 
-  if(OX<300)
-    digitalWrite(dirPinox, HIGH), oxmovement;
+  if(OX<200)
+    digitalWrite(dirPinox, HIGH), oxmovement();
 
-  if(OX>650)
+  if(OX>800)
     digitalWrite(dirPinox, LOW),oxmovement();
 
-
-  if(OY<300)
+  if(OY<200)
     digitalWrite(dirPinoy, HIGH),oymovement();
    
-
-  if(OY>650)
+  if(OY>800)
   digitalWrite(dirPinoy, LOW),oymovement();
 }
 
