@@ -30,6 +30,12 @@ long timp = 120; //start time
 int x = 1000; 
 int del = 55; //delay value
 int cif=1;
+int sen1=3, sen2=4, sen3=5, sen4=6;//pini analogi senzori
+int valn1=0, valn2=0, valn3=0, valn4=0;
+int led=35;
+int deridicat=0;
+int obiectecastigate=0;
+
 
 int potpin =2; // pin analog conectare potentiometru
 int Pin0 = 8; //pini pt stepper5v sus-jos
@@ -115,6 +121,7 @@ void setup() {
   pinMode(e, OUTPUT);
   pinMode(f, OUTPUT);
   pinMode(g, OUTPUT);
+  pinMode(35,OUTPUT);
 
   pinMode(6,INPUT);
   pinMode(7,INPUT);
@@ -545,6 +552,41 @@ void pag7(){
 
 }
 
+void pagfelicitari(){
+ 
+  lcd.clear();
+  lcd.setCursor(3,0);
+  lcd.print("FELICITARI!");
+  lcd.setCursor(4,1);
+  lcd.print("+1 obiecte");
+
+}
+
+void mesajfinal(){
+
+  lcd.clear();
+
+  if(obiectecastigate>0){
+  lcd.setCursor(3,0);
+  lcd.print("Ai castigat");
+  lcd.setCursor(3,1);
+  lcd.print(obiectecastigate);
+  lcd.setCursor(5,1);
+  lcd.print("obiecte!");
+  }
+
+  if(obiectecastigate==0){
+    
+  lcd.setCursor(0,0);
+  lcd.print("Nu ai castigat obiecte");
+  lcd.setCursor(0,1);
+  lcd.print("Mai incearca!");
+  }
+
+
+  delay(9000);
+}
+
 void switcher(){
 
    switch(pag)
@@ -787,10 +829,61 @@ void nine()
   digitalWrite(g, HIGH);
 }
 
+void ajustaresenzorisimediesenzori(){
+  valn1=0;
+  valn2=0;
+  valn3=0;
+  valn4=0;
+  for(int i=1;i<=5;i++){
+    delay(100);
+    valn1=valn1+analogRead(sen1);
+    valn2=valn2+analogRead(sen2);
+    valn3=valn3+analogRead(sen3);
+    valn4=valn4+analogRead(sen4);
+  }
+  valn1=valn1/5;
+  valn2=valn2/5;
+  valn3=valn3/5;
+  valn4=valn4/5;
+   delay(50);
+}
+
+int cadere(){
+
+  if(analogRead(sen1)+60<=valn1)
+    return 1;
+
+  if(analogRead(sen2)+60<=valn2)
+    return 1;
+
+  if(analogRead(sen3)+60<=valn3)
+    return 1;
+  
+  if(analogRead(sen4)+50<=valn4)
+    return 1;
+  
+   return 0;
+}
+
+void canteccadere(){
+
+
+}
+
+void cantecfinal(){  ///cantec cand se afiseaza scorul final
+
+
+}
+
+void cantecinceput(){
+
+
+}
+
 void loop() {
 
   if(mfrc522.PICC_IsNewCardPresent() && credit==0 && start==0)       
-       credit=1, pag1();
+       credit=1, digitalWrite(35,HIGH), pag1();//cantecinceput();
   
   if(credit==1){
 
@@ -803,14 +896,23 @@ void loop() {
       pressed=0;
 
 
-   if(digitalRead(6)==HIGH)
-      start=1,credit=0,timp=120,lcd.clear(),timptrecut=millis();
+   if(digitalRead(26)==HIGH)
+      start=1,credit=0,timp=120,lcd.clear(), obiectecastigate=0, deridicat=0, ajustaresenzorisimediesenzori(),timptrecut=millis();
       
   }
 
   if(start==1){
-
      timer();
+     if(cadere()==1 && deridicat==0){
+        deridicat=1;
+        pagfelicitari();
+       // canteccadere();
+       obiectecastigate++;
+     }
+
+     if(cadere()==0 && deridicat==1)
+        deridicat=0,lcd.clear();
+
      if(analogRead(A0)>800 || analogRead(A1)>800 || analogRead(A0)<200 || analogRead(A1)<200)
       clearLEDs(),oxoy();
      if(digitalRead(7)==HIGH || digitalRead(6)==HIGH)
@@ -824,7 +926,7 @@ void loop() {
   }
 
     if(timp==0)
-      start=0;
+      start=0, digitalWrite(35,LOW), mesajfinal();//cantecfinal();
   }
 
   if(credit==0 && start==0)
@@ -836,4 +938,3 @@ void loop() {
  
   } 
 }
-
