@@ -35,7 +35,9 @@ int valn1=0, valn2=0, valn3=0, valn4=0;
 int led=35;
 int deridicat=0;
 int obiectecastigate=0;
-
+double ozpozitie=0;
+double oxpozitie=0;
+double oypozitie=0;
 
 int potpin =2; // pin analog conectare potentiometru
 int Pin0 = 8; //pini pt stepper5v sus-jos
@@ -151,210 +153,7 @@ void setup() {
   lcd.createChar(7,a1);
 }
 
-void oxmovement()
-{
-   for (int i = 0; i < stepsPerRevolution; i++) {
-    digitalWrite(stepPinox, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPinox, LOW);
-    delayMicroseconds(1000);  }
-    
-  
-}
-
-void oymovement()
-{
-   for (int i = 0; i < stepsPerRevolution; i++) {
-    digitalWrite(stepPinoy, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPinoy, LOW);
-    delayMicroseconds(1000);}
- 
-  
-}
-
-void oxoy()
-{
-  OX=analogRead(A0);
-  OY=analogRead(A1);
-
-  if(OX<200)
-    digitalWrite(dirPinox, HIGH), oxmovement();
-
-  if(OX>800)
-    digitalWrite(dirPinox, LOW),oxmovement();
-
-  if(OY<200)
-    digitalWrite(dirPinoy, HIGH),oymovement();
-   
-  if(OY>800)
-  digitalWrite(dirPinoy, LOW),oymovement();
-}
-
-void clockwise()
-{
-switch(_step){ 
-   case 0: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, HIGH); 
-   break;  
-   case 1: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, HIGH); 
-   break;  
-   case 2: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-   case 3: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-   case 4: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-   case 5: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-     case 6: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-   case 7: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, HIGH); 
-   break;
-   default: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;  
- }
- if(dir){ 
-   _step++; 
- }else{ 
-   _step--; 
- } 
- if(_step>7){ 
-   _step=0; 
- } 
- if(_step<0){ 
-   _step=7; 
- } 
- delay(1); 
-}
-
-void counterclockwise ()
-{
- switch(_step){
- case 0: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, HIGH); 
-   break;  
-case 1: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;   
-case 2: 
-     digitalWrite(Pin0, HIGH);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;
-case 3: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;  
-case 4: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, HIGH); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, LOW); 
-   break;
-case 5: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, LOW); 
-   break; 
-case 6: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, HIGH); 
-     digitalWrite(Pin3, HIGH); 
-   break;
-case 7: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, HIGH); 
-   break;
-default: 
-     digitalWrite(Pin0, LOW);  
-     digitalWrite(Pin1, LOW); 
-     digitalWrite(Pin2, LOW); 
-     digitalWrite(Pin3, LOW); 
-   break;   
- }
- if(dir){ 
-   _step++; 
- }else{ 
-   _step--; 
- } 
- if(_step>7){ 
-   _step=0; 
- } 
- if(_step<0){ 
-   _step=7; 
- } 
- delay(1); 
-}
-
-void oz()
-{
-   while(digitalRead(7)==HIGH)    
-    clockwise();                     
-  
-   while(digitalRead(6)==HIGH)                              
-    counterclockwise(); 
-}
-
-void claw()
-{
-  
-  potpoz = analogRead(potpin);
-  potpoz = map(potpoz, 0, 1023, 29, 65); // scalare in intervalul 0...180
-  myservo.write(potpoz); // setare pozitie servo
-  delay(15); // asteptare rotire servo
-
-  
-}
-
+//LCD
 void sageatadr()
 {
   lcd.setCursor(15,1);
@@ -623,6 +422,7 @@ void switcher(){
    }
 }
 
+//Timer
 void timer(){   
 
   clearLEDs();
@@ -829,6 +629,7 @@ void nine()
   digitalWrite(g, HIGH);
 }
 
+//Senzori cadere
 void ajustaresenzorisimediesenzori(){
   valn1=0;
   valn2=0;
@@ -865,20 +666,245 @@ int cadere(){
    return 0;
 }
 
+//Buzzer
+/*
 void canteccadere(){
-
-
 }
 
 void cantecfinal(){  ///cantec cand se afiseaza scorul final
-
-
 }
 
 void cantecinceput(){
+}*/
 
-
+//X Y Z
+void oxmovement()
+{
+   for (int i = 0; i < stepsPerRevolution; i++) {
+    digitalWrite(stepPinox, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPinox, LOW);
+    delayMicroseconds(1000);  }
+    
+  
 }
+
+void oymovement()
+{
+   for (int i = 0; i < stepsPerRevolution; i++) {
+    digitalWrite(stepPinoy, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPinoy, LOW);
+    delayMicroseconds(1000);}
+ 
+  
+}
+
+void oxoy()
+{
+  OX=analogRead(A0);
+  OY=analogRead(A1);
+
+  if(OX<200)
+    digitalWrite(dirPinox, HIGH), oxmovement();
+
+  if(OX>800)
+    digitalWrite(dirPinox, LOW),oxmovement();
+
+  if(OY<200)
+    digitalWrite(dirPinoy, HIGH),oymovement();
+   
+  if(OY>800)
+  digitalWrite(dirPinoy, LOW),oymovement();
+}
+
+void clockwise()
+{
+switch(_step){ 
+   case 0: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, HIGH); 
+   break;  
+   case 1: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, HIGH); 
+   break;  
+   case 2: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+   case 3: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+   case 4: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+   case 5: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+     case 6: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+   case 7: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, HIGH); 
+   break;
+   default: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+ }
+ if(dir){ 
+   _step++; 
+ }else{ 
+   _step--; 
+ } 
+ if(_step>7){ 
+   _step=0; 
+ } 
+ if(_step<0){ 
+   _step=7; 
+ } 
+ delay(1); 
+}
+
+void counterclockwise ()
+{
+ switch(_step){
+ case 0: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, HIGH); 
+   break;  
+case 1: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;   
+case 2: 
+     digitalWrite(Pin0, HIGH);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;
+case 3: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;  
+case 4: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, HIGH); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, LOW); 
+   break;
+case 5: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, LOW); 
+   break; 
+case 6: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, HIGH); 
+     digitalWrite(Pin3, HIGH); 
+   break;
+case 7: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, HIGH); 
+   break;
+default: 
+     digitalWrite(Pin0, LOW);  
+     digitalWrite(Pin1, LOW); 
+     digitalWrite(Pin2, LOW); 
+     digitalWrite(Pin3, LOW); 
+   break;   
+ }
+ if(dir){ 
+   _step++; 
+ }else{ 
+   _step--; 
+ } 
+ if(_step>7){ 
+   _step=0; 
+ } 
+ if(_step<0){ 
+   _step=7; 
+ } 
+ delay(1); 
+}
+
+void oz()
+{
+   while(digitalRead(7)==HIGH){    //injos  
+    
+     if(ozpozitie>4500)
+        ozpozitie=4510;
+        
+     if(ozpozitie<=4500)
+        clockwise(),ozpozitie=ozpozitie+0.25;          
+    }          
+  
+   while(digitalRead(6)==HIGH){ 
+
+      if(ozpozitie<-3000)
+        ozpozitie=-3010;
+    
+     if(ozpozitie>=-3000)
+       counterclockwise(),ozpozitie=ozpozitie-0.25;
+}
+}
+
+void repozitionareoz(){
+   
+   while(!(ozpozitie>=-1 && ozpozitie<=1)){
+   if(ozpozitie>0)
+        counterclockwise(),ozpozitie=ozpozitie-0.25;
+
+   if(ozpozitie<0)
+         clockwise(),ozpozitie=ozpozitie+0.25;
+}
+}
+
+void claw()
+{
+  
+  potpoz = analogRead(potpin);
+  potpoz = map(potpoz, 0, 1023, 29, 65); // scalare in intervalul 0...180
+  myservo.write(potpoz); // setare pozitie servo
+  delay(10); // asteptare rotire servo
+
+  
+}
+
 
 void loop() {
 
@@ -913,10 +939,12 @@ void loop() {
      if(cadere()==0 && deridicat==1)
         deridicat=0,lcd.clear();
 
-     if(analogRead(A0)>800 || analogRead(A1)>800 || analogRead(A0)<200 || analogRead(A1)<200)
+    if(analogRead(A0)>800 || analogRead(A1)>800 || analogRead(A0)<200 || analogRead(A1)<200)
       clearLEDs(),oxoy();
-     if(digitalRead(7)==HIGH || digitalRead(6)==HIGH)
+      
+    if(digitalRead(7)==HIGH || digitalRead(6)==HIGH)
       clearLEDs(),oz();
+
     if(analogRead(potpin)!=potpoz)
       clearLEDs(),claw();
    
@@ -926,7 +954,7 @@ void loop() {
   }
 
     if(timp==0)
-      start=0, digitalWrite(35,LOW), mesajfinal();//cantecfinal();
+      start=0, digitalWrite(35,LOW), mesajfinal(), repozitionareoz();//cantecfinal();
   }
 
   if(credit==0 && start==0)
