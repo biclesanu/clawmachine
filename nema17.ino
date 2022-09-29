@@ -1057,10 +1057,10 @@ void repozitionareoz(){
 
 void claw()
 {
-  
+  int servopoz;
   potpoz = analogRead(potpin);
-  potpoz = map(potpoz, 0, 1023, 29, 65); // scalare in intervalul 0...180
-  myservo.write(potpoz); // setare pozitie servo
+  servopoz = map(potpoz, 0, 1023, 29, 65); // scalare in intervalul 0...180
+  myservo.write(servopoz); // setare pozitie servo
   delay(10); // asteptare rotire servo
 
   
@@ -1084,7 +1084,7 @@ void loop() {
 
 
    if(digitalRead(26)==HIGH)
-      start=1,credit=0,timp=/*1*/20,lcd.clear(), obiectecastigate=0, deridicat=0, ajustaresenzorisimediesenzori(), play_rtttl(piesaapasat),timptrecut=millis();
+      start=1,credit=0,timp=120,lcd.clear(), obiectecastigate=0, deridicat=0, ajustaresenzorisimediesenzori(), play_rtttl(piesaapasat),timptrecut=millis();
       
   }
 
