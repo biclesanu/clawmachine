@@ -1026,25 +1026,25 @@ void oz()
 {
    while(digitalRead(6)==HIGH){    //injos  && (ozpozitie>=-20 && ozpozitie<=8000)
     
-     if(ozpozitie>=3100)
-        ozpozitie=3101;
+     //if(ozpozitie>=3100)
+       // ozpozitie=3101;
         
-     if(ozpozitie<=3100)
-        counterclockwise(),ozpozitie=ozpozitie+0.25;          
+     //if(ozpozitie<=3100)
+        counterclockwise();//,ozpozitie=ozpozitie+0.25;          
     }          
   
    while(digitalRead(7)==HIGH){ 
 
-      if(ozpozitie<=-3100)
-        ozpozitie=-3101;
+     // if(ozpozitie<=-3100)
+       // ozpozitie=-3101;
     
-     if(ozpozitie>=-3100)
-       clockwise(),ozpozitie=ozpozitie-0.25;
+     //if(ozpozitie>=-3100)
+       clockwise();//,ozpozitie=ozpozitie-0.25;
 }
 }
 
 
-void repozitionareoz(){
+/*void repozitionareoz(){
    
    while(!(ozpozitie>=-1 && ozpozitie<=1)){
    if(ozpozitie>0)
@@ -1053,7 +1053,7 @@ void repozitionareoz(){
    if(ozpozitie<0)
          counterclockwise(),ozpozitie=ozpozitie+0.25;
 }
-}
+}*/
 
 void claw()
 {
@@ -1116,7 +1116,7 @@ void loop() {
   }
 
     if(timp<=0)
-      start=0,clearLEDs(), mesajfinal(), play_rtttl(piesafinal), repozitionarexoy(),repozitionareoz();
+      start=0,clearLEDs(), mesajfinal(), play_rtttl(piesafinal), repozitionarexoy();//,repozitionareoz();
   }
 
   if(credit==0 && start==0)
