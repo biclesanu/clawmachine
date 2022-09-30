@@ -1059,11 +1059,10 @@ void claw()
 {
   int servopoz;
   potpoz = analogRead(potpin);
-  servopoz = map(potpoz, 0, 1023, 29, 65); // scalare in intervalul 0...180
+  servopoz = map(potpoz, 0, 1023, 0, 70); // scalare in intervalul 0...180
   myservo.write(servopoz); // setare pozitie servo
-  delay(10); // asteptare rotire servo
+  delay(50); // asteptare rotire servo
 
-  
 }
 
 
